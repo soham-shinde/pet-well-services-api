@@ -1,0 +1,118 @@
+package com.petwellservices.api.controller;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.petwellservices.api.dto.AreaDto;
+import com.petwellservices.api.entities.Area;
+import com.petwellservices.api.entities.FoodShop;
+import com.petwellservices.api.entities.Groomer;
+import com.petwellservices.api.entities.Sitter;
+import com.petwellservices.api.entities.Veterinary;
+import com.petwellservices.api.response.ApiResponse;
+import com.petwellservices.api.service.area.IAreaService;
+import com.petwellservices.api.service.city.ICityService;
+import com.petwellservices.api.service.foodshop.IFoodShopService;
+import com.petwellservices.api.service.groomer.IGroomerService;
+import com.petwellservices.api.service.sitter.ISitterService;
+import com.petwellservices.api.service.veterinary.VeterinaryService;
+
+import lombok.RequiredArgsConstructor;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+@RequiredArgsConstructor
+@RestController
+@RequestMapping("/address")
+public class AddressController {
+    final IAreaService areaService;
+    final ICityService cityService;
+    final VeterinaryService veterinaryService;
+
+    final IGroomerService groomerService;
+
+    final ISitterService sitterService;
+
+    final IFoodShopService foodShopService;
+
+    @GetMapping("/cities-areas")
+    public ResponseEntity<ApiResponse> getCitiesAreas() {
+        try {
+            Map<String, Object> response = new HashMap<>();
+            response.put("cities", cityService.getCities());
+
+            List<Area> areas = areaService.getAreas();
+
+            List<AreaDto> dto = areas.stream()
+                    .map(this::convertAreaToDto).toList();
+            response.put("areas", dto);
+            return ResponseEntity.ok(new ApiResponse("success", response));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse("error", e.getMessage()));
+
+        }
+    }
+
+    public AreaDto convertAreaToDto(Area area) {
+        AreaDto dto = new AreaDto();
+        dto.setAreaId(area.getAreaId());
+        dto.setAreaName(area.getAreaName());
+        dto.setCityId(area.getCity().getCityId());
+        return dto;
+    }
+
+    @GetMapping("/veterinaries/city/{cityId}")
+    public ResponseEntity<ApiResponse> getVeterinariesByCityId(@PathVariable Long cityId) {
+        List<Veterinary> veterinarians = veterinaryService.getVeterinariesByCityId(cityId);
+        return ResponseEntity.ok(new ApiResponse("success", veterinarians));
+    }
+
+    @GetMapping("/veterinaries/area/{areaId}")
+    public ResponseEntity<ApiResponse> getVeterinariesByAreaId(@PathVariable Long areaId) {
+        List<Veterinary> veterinarians = veterinaryService.getVeterinariesByAreaId(areaId);
+        return ResponseEntity.ok(new ApiResponse("success", veterinarians));
+    }
+
+    @GetMapping("/groomers/city/{cityId}")
+    public ResponseEntity<ApiResponse> getGroomersByCityId(@PathVariable Long cityId) {
+        List<Groomer> groomers = groomerService.getGroomersByCityId(cityId);
+        return ResponseEntity.ok(new ApiResponse("success", groomers));
+    }
+
+    @GetMapping("/groomers/area/{areaId}")
+    public ResponseEntity<ApiResponse> getGroomersByAreaId(@PathVariable Long areaId) {
+        List<Groomer> groomers = groomerService.getGroomersByAreaId(areaId);
+        return ResponseEntity.ok(new ApiResponse("success", groomers));
+    }
+
+    @GetMapping("/sitters/city/{cityId}")
+    public ResponseEntity<ApiResponse> getSittersByCityId(@PathVariable Long cityId) {
+        List<Sitter> sitters = sitterService.getSittersByCityId(cityId);
+        return ResponseEntity.ok(new ApiResponse("success", sitters));
+    }
+
+    @GetMapping("/sitters/area/{areaId}")
+    public ResponseEntity<ApiResponse> getSittersByAreaId(@PathVariable Long areaId) {
+        List<Sitter> sitters = sitterService.getSittersByAreaId(areaId);
+        return ResponseEntity.ok(new ApiResponse("success", sitters));
+    }
+
+    @GetMapping("/food-shops/city/{cityId}")
+    public ResponseEntity<ApiResponse> getFoodShopsByCityId(@PathVariable Long cityId) {
+        List<FoodShop> foodShops = foodShopService.getFoodShopsByCityId(cityId);
+        return ResponseEntity.ok(new ApiResponse("success", foodShops));
+    }
+
+    @GetMapping("/food-shops/area/{areaId}")
+    public ResponseEntity<ApiResponse> getFoodShopsByAreaId(@PathVariable Long areaId) {
+        List<FoodShop> foodShops = foodShopService.getFoodShopsByAreaId(areaId);
+        return ResponseEntity.ok(new ApiResponse("success", foodShops));
+    }
+}
