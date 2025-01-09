@@ -13,7 +13,7 @@ public class CoreConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**") // Allow all endpoints
-                        .allowedOrigins("http://localhost:3000", "**") // Specify allowed origins
+                        .allowedOrigins("http://localhost:3000", "https://pet-well-services-react.vercel.app","**") // Specify allowed origins
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Specify allowed HTTP methods
                         .allowedHeaders("*") // Allow all headers
                         .allowCredentials(true); // Allow cookies
