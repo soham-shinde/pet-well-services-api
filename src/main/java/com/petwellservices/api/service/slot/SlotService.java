@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.petwellservices.api.entities.Slot;
 import com.petwellservices.api.entities.User;
 import com.petwellservices.api.enums.UserType;
+import com.petwellservices.api.exception.InvalidResourceException;
 import com.petwellservices.api.exception.ResourceNotFoundException;
 import com.petwellservices.api.repository.GroomerRepository;
 import com.petwellservices.api.repository.SitterRepository;
@@ -30,35 +31,34 @@ public class SlotService implements ISlotService {
     private final SitterRepository sitterRepository;
     private final GroomerRepository groomerRepository;
 
-    // Create a new Slot
     public Slot createSlot(Long userId, Slot slot) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + userId));
 
         if (isSlotAlreadyExists(userId, slot.getSlotTime(), slot.getUserType())) {
-            throw new RuntimeException("Slot already exists for the given time and user type.");
+            throw new InvalidResourceException("Slot already exists for the given time and user type.");
         }
 
         if (slot.getUserType().name().equalsIgnoreCase("GROOMER")
                 && slotRepository.countByUserUserId(userId) >= groomerRepository.findByUserUserId(userId).get()
                         .getNoOfSlots()) {
 
-            throw new RuntimeException("Reach Max Slots");
+            throw new InvalidResourceException("Reach Max Slots");
 
         }
         if (slot.getUserType().name().equalsIgnoreCase("SITTER")
                 && slotRepository.countByUserUserId(userId) >= sitterRepository.findByUserUserId(userId).get()
                         .getNoOfSlots()) {
 
-            throw new RuntimeException("Reach Max Slots");
+            throw new InvalidResourceException("Reach Max Slots");
 
         }
-      
+
         if (slot.getUserType().name().equalsIgnoreCase("VETERINARY")
                 && slotRepository.countByUserUserId(userId) >= veterinaryRepository.findByUserUserId(userId).get()
                         .getNoOfSlots()) {
 
-            throw new RuntimeException("Reach Max Slots");
+            throw new InvalidResourceException("Reach Max Slots");
 
         }
 
@@ -66,7 +66,6 @@ public class SlotService implements ISlotService {
         return slotRepository.save(slot);
     }
 
-    // Update an existing Slot
     public Slot updateSlot(Long slotId, Slot updatedSlot) {
         Slot existingSlot = slotRepository.findById(slotId)
                 .orElseThrow(() -> new ResourceNotFoundException("Slot not found with ID: " + slotId));
@@ -81,12 +80,10 @@ public class SlotService implements ISlotService {
         return slotRepository.save(existingSlot);
     }
 
-    // Get all Slots for a user
     public List<Slot> getSlotsByUserId(Long userId) {
         return slotRepository.findByUserUserId(userId);
     }
 
-    // Delete a Slot by ID
     public void deleteSlot(Long slotId) {
         Slot slot = slotRepository.findById(slotId)
                 .orElseThrow(() -> new ResourceNotFoundException("Slot not found with ID: " + slotId));
@@ -94,13 +91,10 @@ public class SlotService implements ISlotService {
         slotRepository.delete(slot);
     }
 
-    // Check if a slot already exists for a user at the given time and user type
     private boolean isSlotAlreadyExists(Long userId, LocalTime slotTime, UserType userType) {
         return slotRepository.existsByUserUserIdAndSlotTimeAndUserType(userId, slotTime, userType);
     }
 
-    // Overloaded method to check for duplicates excluding the current slot (for
-    // update)
     private boolean isSlotAlreadyExists(Long userId, LocalTime slotTime, UserType userType, Long excludeSlotId) {
         return slotRepository.existsByUserUserIdAndSlotTimeAndUserTypeAndSlotIdNot(userId, slotTime, userType,
                 excludeSlotId);

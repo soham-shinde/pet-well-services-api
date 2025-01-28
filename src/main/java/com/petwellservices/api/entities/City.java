@@ -1,7 +1,5 @@
 package com.petwellservices.api.entities;
 
-
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 public class City {
-     @Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cityId;
 

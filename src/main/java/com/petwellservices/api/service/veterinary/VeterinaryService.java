@@ -11,18 +11,23 @@ import org.springframework.stereotype.Service;
 
 import com.petwellservices.api.dto.SlotDto;
 import com.petwellservices.api.dto.VeterinaryDto;
-import com.petwellservices.api.entities.Groomer;
+import com.petwellservices.api.entities.Area;
+import com.petwellservices.api.entities.City;
 import com.petwellservices.api.entities.Slot;
 import com.petwellservices.api.entities.Veterinary;
 import com.petwellservices.api.entities.VeterinaryAppointment;
 import com.petwellservices.api.enums.AppointmentStatus;
 import com.petwellservices.api.enums.UserStatus;
 import com.petwellservices.api.exception.ResourceNotFoundException;
+import com.petwellservices.api.repository.AreaRepository;
+import com.petwellservices.api.repository.CityRepository;
 import com.petwellservices.api.repository.SlotRepository;
 import com.petwellservices.api.repository.UserRepository;
 import com.petwellservices.api.repository.VeterinaryAppointmentRepository;
 import com.petwellservices.api.repository.VeterinaryRepository;
+import com.petwellservices.api.request.CreateVeterinaryRequest;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -38,6 +43,8 @@ public class VeterinaryService implements IVeterinaryService {
 
     private final ModelMapper modelMapper;
 
+    private final CityRepository cityRepository;
+    private final AreaRepository areaRepository;
     private final UserRepository userRepository;
 
     @Override
@@ -65,7 +72,6 @@ public class VeterinaryService implements IVeterinaryService {
 
         List<Slot> slots = slotRepository.findByUserUserId(veterinary.getUser().getUserId());
 
-        // Check if each slot is booked in SitterAppointment
         List<SlotDto> slotDtos = slots.stream().map(slot -> {
             LocalDate today = LocalDate.now();
 
@@ -74,7 +80,7 @@ public class VeterinaryService implements IVeterinaryService {
             SlotDto slotDto = new SlotDto();
             slotDto.setSlotId(slot.getSlotId());
             slotDto.setSlotTime(slot.getSlotTime());
-            slotDto.setAvailable(!isBooked); // Slot is available if not booked
+            slotDto.setAvailable(!isBooked);
             return slotDto;
         }).collect(Collectors.toList());
 
@@ -155,7 +161,6 @@ public class VeterinaryService implements IVeterinaryService {
 
         List<Slot> slots = slotRepository.findByUserUserId(veterinary.getUser().getUserId());
 
-        // Check if each slot is booked in SitterAppointment
         List<SlotDto> slotDtos = slots.stream().map(slot -> {
             LocalDate today = LocalDate.now();
 
@@ -164,12 +169,38 @@ public class VeterinaryService implements IVeterinaryService {
             SlotDto slotDto = new SlotDto();
             slotDto.setSlotId(slot.getSlotId());
             slotDto.setSlotTime(slot.getSlotTime());
-            slotDto.setAvailable(!isBooked); // Slot is available if not booked
+            slotDto.setAvailable(!isBooked); 
             return slotDto;
-        }).collect(Collectors.toList());
+        }).toList();
 
         sitterDto.setSlots(slotDtos);
 
         return sitterDto;
+    }
+
+    public Veterinary updateVeterinary(Long veterinaryId, CreateVeterinaryRequest updateVeterinaryRequest) {
+      
+        Veterinary veterinary = veterinaryRepository.findById(veterinaryId)
+                .orElseThrow(() -> new EntityNotFoundException("Veterinary not found with id: " + veterinaryId));
+
+        veterinary.setSpecialization(updateVeterinaryRequest.getSpecialization());
+        veterinary.setExperience(updateVeterinaryRequest.getExperience());
+        veterinary.setLicenseNo(updateVeterinaryRequest.getLicenseNo());
+        veterinary.setClinicName(updateVeterinaryRequest.getClinicName());
+        veterinary.setClinicPhoneNo(updateVeterinaryRequest.getClinicPhoneNo());
+        veterinary.setClinicAddress(updateVeterinaryRequest.getClinicAddress());
+        veterinary.setNoOfSlots(updateVeterinaryRequest.getNoOfSlots());
+
+        City city = cityRepository.findById(updateVeterinaryRequest.getCityId())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "City not found with id: " + updateVeterinaryRequest.getCityId()));
+        veterinary.setCity(city);
+
+        Area area = areaRepository.findById(updateVeterinaryRequest.getAreaId())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Area not found with id: " + updateVeterinaryRequest.getAreaId()));
+        veterinary.setArea(area);
+
+        return veterinaryRepository.save(veterinary);
     }
 }

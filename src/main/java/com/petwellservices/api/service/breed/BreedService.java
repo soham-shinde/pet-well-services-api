@@ -14,12 +14,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class BreedService implements IBreedService {
-    
+
     private final BreedRepository breedRepository;
+
     @Override
     public Breed createBreed(Breed breed) {
         if (breedRepository.existsByBreedName(breed.getBreedName())) {
-            throw new RuntimeException("Breed already exists with name: " + breed.getBreedName());
+            throw new ResourceNotFoundException("Breed already exists with name: " + breed.getBreedName());
         }
         return breedRepository.save(breed);
     }
@@ -38,14 +39,14 @@ public class BreedService implements IBreedService {
     @Override
     public void deleteBreedById(Long breedId) {
         if (!breedRepository.existsById(breedId)) {
-            throw new RuntimeException("Breed not found with id: " + breedId);
+            throw new ResourceNotFoundException("Breed not found with id: " + breedId);
         }
         breedRepository.deleteById(breedId);
     }
 
     @Override
     public Breed updateBreed(Long breedId, String breedName) {
-        Breed breed =  breedRepository.findById(breedId).orElseThrow(()->new ResourceNotFoundException("Not Found"));
+        Breed breed = breedRepository.findById(breedId).orElseThrow(() -> new ResourceNotFoundException("Not Found"));
         breed.setBreedName(breedName);
         return breedRepository.save(breed);
     }

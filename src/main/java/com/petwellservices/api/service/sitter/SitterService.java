@@ -4,28 +4,30 @@ package com.petwellservices.api.service.sitter;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import com.petwellservices.api.dto.SitterDto;
 import com.petwellservices.api.dto.SlotDto;
-import com.petwellservices.api.dto.VeterinaryDto;
-import com.petwellservices.api.entities.Groomer;
+import com.petwellservices.api.entities.Area;
+import com.petwellservices.api.entities.City;
 import com.petwellservices.api.entities.Sitter;
 import com.petwellservices.api.entities.SitterAppointment;
 import com.petwellservices.api.entities.Slot;
 import com.petwellservices.api.entities.User;
-import com.petwellservices.api.entities.Veterinary;
 import com.petwellservices.api.enums.AppointmentStatus;
 import com.petwellservices.api.enums.UserStatus;
+import com.petwellservices.api.exception.InvalidResourceException;
 import com.petwellservices.api.exception.ResourceNotFoundException;
+import com.petwellservices.api.repository.AreaRepository;
+import com.petwellservices.api.repository.CityRepository;
 import com.petwellservices.api.repository.SitterAppointmentRepository;
 import com.petwellservices.api.repository.SitterRepository;
 import com.petwellservices.api.repository.SlotRepository;
 import com.petwellservices.api.repository.UserRepository;
+import com.petwellservices.api.request.CreateSitterRequest;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -40,6 +42,8 @@ public class SitterService implements ISitterService {
 
     private final SitterAppointmentRepository appointmentRepository;
     private final ModelMapper modelMapper;
+    private final CityRepository cityRepository;
+    private final AreaRepository areaRepository;
 
     @Override
     public List<SitterAppointment> getAllAppointmentsBySitter(Long sitterId) {
@@ -70,21 +74,22 @@ public class SitterService implements ISitterService {
 
         List<Slot> slots = slotRepository.findByUserUserId(sitter.getUser().getUserId());
 
-        // Check if each slot is booked in SitterAppointment
         List<SlotDto> slotDtos = slots.stream().map(slot -> {
-             LocalDate today = LocalDate.now();
-            boolean isBooked = appointmentRepository.existsBySitterSitterIdAndDateAndSlotSlotId(sitter.getSitterId(), today,slot.getSlotId());
+            LocalDate today = LocalDate.now();
+            boolean isBooked = appointmentRepository.existsBySitterSitterIdAndDateAndSlotSlotId(sitter.getSitterId(),
+                    today, slot.getSlotId());
             SlotDto slotDto = new SlotDto();
             slotDto.setSlotId(slot.getSlotId());
             slotDto.setSlotTime(slot.getSlotTime());
-            slotDto.setAvailable(!isBooked); // Slot is available if not booked
+            slotDto.setAvailable(!isBooked);
             return slotDto;
-        }).collect(Collectors.toList());
+        }).toList();
 
         sitterDto.setSlots(slotDtos);
 
         return sitterDto;
     }
+
     @Override
     public SitterDto getSitterInfoWithSlotsBySitterId(Long sitterId) {
         Sitter sitter = sitterRepository.findById(sitterId)
@@ -94,16 +99,16 @@ public class SitterService implements ISitterService {
 
         List<Slot> slots = slotRepository.findByUserUserId(sitter.getUser().getUserId());
 
-        // Check if each slot is booked in SitterAppointment
         List<SlotDto> slotDtos = slots.stream().map(slot -> {
-             LocalDate today = LocalDate.now();
-            boolean isBooked = appointmentRepository.existsBySitterSitterIdAndDateAndSlotSlotId(sitter.getSitterId(), today,slot.getSlotId());
+            LocalDate today = LocalDate.now();
+            boolean isBooked = appointmentRepository.existsBySitterSitterIdAndDateAndSlotSlotId(sitter.getSitterId(),
+                    today, slot.getSlotId());
             SlotDto slotDto = new SlotDto();
             slotDto.setSlotId(slot.getSlotId());
             slotDto.setSlotTime(slot.getSlotTime());
-            slotDto.setAvailable(!isBooked); // Slot is available if not booked
+            slotDto.setAvailable(!isBooked);
             return slotDto;
-        }).collect(Collectors.toList());
+        }).toList();
 
         sitterDto.setSlots(slotDtos);
 
@@ -162,26 +167,22 @@ public class SitterService implements ISitterService {
 
     @Override
     public SitterAppointment bookAppointment(SitterAppointment appointment, User user) {
-        // Ensure that the user is not null
+
         if (user == null) {
-            throw new RuntimeException("User must be logged in to book an appointment.");
+            throw new InvalidResourceException("User must be logged in to book an appointment.");
         }
 
-        // Set the user for the appointment
         appointment.setUser(user);
 
-        // Check if the sitter exists
         if (!sitterRepository.existsById(appointment.getSitter().getSitterId())) {
-            throw new RuntimeException("Sitter does not exist.");
+            throw new InvalidResourceException("Sitter does not exist.");
         }
 
-        // Check if the slot is available
         Slot slot = appointment.getSlot();
         if (slot == null || slotRepository.findById(slot.getSlotId()).isEmpty()) {
-            throw new RuntimeException("Selected slot is not available.");
+            throw new InvalidResourceException("Selected slot is not available.");
         }
 
-        // Save and return the appointment
         return appointmentRepository.save(appointment);
     }
 
@@ -191,6 +192,29 @@ public class SitterService implements ISitterService {
         return sitters.stream()
                 .map(veterinary -> modelMapper.map(veterinary, SitterDto.class))
                 .toList();
+    }
+
+    @Override
+    public Sitter updateSitter(Long sitterId, CreateSitterRequest updateSitterRequest) {
+
+        Sitter sitter = sitterRepository.findById(sitterId)
+                .orElseThrow(() -> new EntityNotFoundException("Sitter not found with id: " + sitterId));
+
+        sitter.setCenterPhoneNo(updateSitterRequest.getCenterPhoneNo());
+        sitter.setCenterAddress(updateSitterRequest.getCenterAddress());
+        sitter.setNoOfSlots(updateSitterRequest.getNoOfSlots());
+
+        City city = cityRepository.findById(updateSitterRequest.getCityId())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "City not found with id: " + updateSitterRequest.getCityId()));
+        sitter.setCity(city);
+
+        Area area = areaRepository.findById(updateSitterRequest.getAreaId())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Area not found with id: " + updateSitterRequest.getAreaId()));
+        sitter.setArea(area);
+
+        return sitterRepository.save(sitter);
     }
 
 }

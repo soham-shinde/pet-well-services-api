@@ -70,49 +70,97 @@ public class AddressController {
 
     @GetMapping("/veterinaries/city/{cityId}")
     public ResponseEntity<ApiResponse> getVeterinariesByCityId(@PathVariable Long cityId) {
-        List<Veterinary> veterinarians = veterinaryService.getVeterinariesByCityId(cityId);
-        return ResponseEntity.ok(new ApiResponse("success", veterinarians));
+        try {
+            List<Veterinary> veterinarians = veterinaryService.getVeterinariesByCityId(cityId);
+            return ResponseEntity.ok(new ApiResponse("success", veterinarians));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse("error", e.getMessage()));
+        }
     }
 
     @GetMapping("/veterinaries/area/{areaId}")
     public ResponseEntity<ApiResponse> getVeterinariesByAreaId(@PathVariable Long areaId) {
-        List<Veterinary> veterinarians = veterinaryService.getVeterinariesByAreaId(areaId);
-        return ResponseEntity.ok(new ApiResponse("success", veterinarians));
+        try {
+            List<Veterinary> veterinarians = veterinaryService.getVeterinariesByAreaId(areaId);
+            return ResponseEntity.ok(new ApiResponse("success", veterinarians));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse("error", e.getMessage()));
+        }
     }
 
     @GetMapping("/groomers/city/{cityId}")
     public ResponseEntity<ApiResponse> getGroomersByCityId(@PathVariable Long cityId) {
-        List<Groomer> groomers = groomerService.getGroomersByCityId(cityId);
-        return ResponseEntity.ok(new ApiResponse("success", groomers));
+        try {
+            List<Groomer> groomers = groomerService.getGroomersByCityId(cityId);
+            return ResponseEntity.ok(new ApiResponse("success", groomers));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse("error", e.getMessage()));
+        }
     }
 
     @GetMapping("/groomers/area/{areaId}")
     public ResponseEntity<ApiResponse> getGroomersByAreaId(@PathVariable Long areaId) {
-        List<Groomer> groomers = groomerService.getGroomersByAreaId(areaId);
-        return ResponseEntity.ok(new ApiResponse("success", groomers));
+        try {
+            List<Groomer> groomers = groomerService.getGroomersByAreaId(areaId);
+            return ResponseEntity.ok(new ApiResponse("success", groomers));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse("error", e.getMessage()));
+        }
     }
 
     @GetMapping("/sitters/city/{cityId}")
     public ResponseEntity<ApiResponse> getSittersByCityId(@PathVariable Long cityId) {
-        List<Sitter> sitters = sitterService.getSittersByCityId(cityId);
-        return ResponseEntity.ok(new ApiResponse("success", sitters));
+        try {
+            List<Sitter> sitters = sitterService.getSittersByCityId(cityId);
+            return ResponseEntity.ok(new ApiResponse("success", sitters));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse("error", e.getMessage()));
+        }
     }
 
     @GetMapping("/sitters/area/{areaId}")
     public ResponseEntity<ApiResponse> getSittersByAreaId(@PathVariable Long areaId) {
-        List<Sitter> sitters = sitterService.getSittersByAreaId(areaId);
-        return ResponseEntity.ok(new ApiResponse("success", sitters));
+        try {
+            List<Sitter> sitters = sitterService.getSittersByAreaId(areaId);
+            return ResponseEntity.ok(new ApiResponse("success", sitters));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse("error", e.getMessage()));
+        }
     }
 
     @GetMapping("/food-shops/city/{cityId}")
     public ResponseEntity<ApiResponse> getFoodShopsByCityId(@PathVariable Long cityId) {
-        List<FoodShop> foodShops = foodShopService.getFoodShopsByCityId(cityId);
-        return ResponseEntity.ok(new ApiResponse("success", foodShops));
+        try {
+            List<FoodShop> foodShops = foodShopService.getFoodShopsByCityId(cityId);
+            return ResponseEntity.ok(new ApiResponse("success", foodShops));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse("error", e.getMessage()));
+        }
     }
 
     @GetMapping("/food-shops/area/{areaId}")
     public ResponseEntity<ApiResponse> getFoodShopsByAreaId(@PathVariable Long areaId) {
-        List<FoodShop> foodShops = foodShopService.getFoodShopsByAreaId(areaId);
-        return ResponseEntity.ok(new ApiResponse("success", foodShops));
+        try {
+            List<FoodShop> foodShops = foodShopService.getFoodShopsByAreaId(areaId);
+            return ResponseEntity.ok(new ApiResponse("success", foodShops));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse("error", e.getMessage()));
+        }
     }
 }

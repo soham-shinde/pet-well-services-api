@@ -2,7 +2,6 @@ package com.petwellservices.api.request;
 
 import lombok.Data;
 
-
 @Data
 public class CreatePetRequest {
 
@@ -12,6 +11,5 @@ public class CreatePetRequest {
 
     private Long breedId;
     private Long categoryId;
-
 
 }

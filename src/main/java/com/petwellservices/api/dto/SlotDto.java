@@ -7,7 +7,8 @@ import lombok.Data;
 @Data
 public class SlotDto {
     private Long slotId;
+
     private LocalTime slotTime;
+    
     private boolean available;
 }
- 

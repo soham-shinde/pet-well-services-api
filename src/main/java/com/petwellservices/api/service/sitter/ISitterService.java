@@ -10,6 +10,7 @@ import com.petwellservices.api.entities.Slot;
 import com.petwellservices.api.entities.User;
 import com.petwellservices.api.enums.AppointmentStatus;
 import com.petwellservices.api.enums.UserStatus;
+import com.petwellservices.api.request.CreateSitterRequest;
 
 public interface ISitterService {
     List<SitterAppointment> getAllAppointmentsBySitter(Long sitterId);
@@ -39,4 +40,5 @@ public interface ISitterService {
 
     List<SitterDto> getSitterByStatus(UserStatus status);
 
+    Sitter updateSitter(Long sitterId, CreateSitterRequest updateSitterRequest);
 }

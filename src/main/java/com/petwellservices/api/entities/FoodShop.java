@@ -41,7 +41,7 @@ public class FoodShop {
     @JoinColumn(name = "city_id", nullable = false)
     private City city;
 
-     @ManyToOne
+    @ManyToOne
     @JoinColumn(name = "area_id", nullable = false)
     private Area area;
 

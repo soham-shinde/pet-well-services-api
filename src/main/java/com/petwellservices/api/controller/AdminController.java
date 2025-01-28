@@ -41,6 +41,7 @@ import com.petwellservices.api.service.sitter.ISitterService;
 import com.petwellservices.api.service.user.IUserService;
 import com.petwellservices.api.service.veterinary.IVeterinaryService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -77,6 +78,7 @@ public class AdminController {
         }
 
     }
+
     @GetMapping("/users/{userId}")
     public ResponseEntity<ApiResponse> getUserById(@PathVariable Long userId) {
         try {
@@ -106,24 +108,12 @@ public class AdminController {
         try {
             List<VeterinaryDto> veterinarians = veterinaryService.getVeterinariesByStatus(status);
             return ResponseEntity.ok(new ApiResponse("success", veterinarians));
-            
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse("error", e.getMessage()));
         }
     }
-
-    // @GetMapping("/veterinarians/{veterinaryId}")
-    // public ResponseEntity<ApiResponse> getVeterinariesByStatus(@PathVariable Long veterinaryId) {
-    //     try {
-    //        VeterinaryDto veterinarians = veterinaryService.getVeterinaryById(veterinaryId);
-    //         return ResponseEntity.ok(new ApiResponse("success", veterinarians));
-            
-    //     } catch (Exception e) {
-    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-    //                 .body(new ApiResponse("error", e.getMessage()));
-    //     }
-    // }
 
     @PutMapping("/veterinarians/{id}/status")
     public ResponseEntity<ApiResponse> updateVeterinaryStatus(@PathVariable Long id, @RequestParam UserStatus status) {
@@ -156,7 +146,7 @@ public class AdminController {
         try {
             List<SitterDto> sitters = sitterService.getSitterByStatus(status);
             return ResponseEntity.ok(new ApiResponse("success", sitters));
-            
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse("error", e.getMessage()));
@@ -175,7 +165,6 @@ public class AdminController {
         }
     }
 
-    
     @DeleteMapping("/sitters/{id}")
     public ResponseEntity<ApiResponse> deleteSitter(@PathVariable Long id) {
 
@@ -188,13 +177,12 @@ public class AdminController {
         }
     }
 
-
     @GetMapping("/groomer/status/{status}")
     public ResponseEntity<ApiResponse> getGroomerByStatus(@PathVariable UserStatus status) {
         try {
             List<GroomerDto> groomers = groomerService.getGroomersByStatus(status);
             return ResponseEntity.ok(new ApiResponse("success", groomers));
-            
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse("error", e.getMessage()));
@@ -234,8 +222,21 @@ public class AdminController {
         try {
             City city = cityService.getCityById(foodShop.getCityId());
             Area area = areaService.getAreaById(foodShop.getAreaId());
-            FoodShop createdFoodShop = foodShopService.createFoodShop(foodShop,city,area);
+            FoodShop createdFoodShop = foodShopService.createFoodShop(foodShop, city, area);
             return ResponseEntity.ok(new ApiResponse("success", createdFoodShop));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse("error", e.getMessage()));
+        }
+    }
+
+    @PutMapping("/food-shops/{shopId}")
+    public ResponseEntity<ApiResponse> updateFoodShop(
+            @PathVariable Long shopId,
+            @RequestBody @Valid CreateFoodShopRequest updateFoodShopRequest) {
+        try {
+            FoodShop updatedFoodShop = foodShopService.updateFoodShop(shopId, updateFoodShopRequest);
+            return ResponseEntity.ok(new ApiResponse("success", updatedFoodShop));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse("error", e.getMessage()));
@@ -295,20 +296,6 @@ public class AdminController {
         }
     }
 
-    @DeleteMapping("/categories/{id}")
-    public ResponseEntity<ApiResponse> deleteCategory(@PathVariable Long id) {
-
-        try {
-            categoryService.deleteCategoryById(id);
-            return ResponseEntity.ok(new ApiResponse("success", "Deleted Successfully"));
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
-        }
-
-    }
-
     @PostMapping("/breeds")
     public ResponseEntity<ApiResponse> createBreed(@RequestBody Breed breed) {
 
@@ -335,19 +322,6 @@ public class AdminController {
         }
     }
 
-    @DeleteMapping("/breeds/{id}")
-    public ResponseEntity<ApiResponse> deleteBreed(@PathVariable Long id) {
-
-        try {
-            breedService.deleteBreedById(id);
-            return ResponseEntity.ok(new ApiResponse("success", "Deleted Successfully"));
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
-        }
-    }
-
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> loginUser(@RequestBody LoginRequest request) {
 
@@ -365,7 +339,6 @@ public class AdminController {
 
             }
 
-            // Return error response if credentials are invalid
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new ApiResponse("error", "Invalid email or password"));
 

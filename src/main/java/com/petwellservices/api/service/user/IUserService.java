@@ -12,15 +12,22 @@ import com.petwellservices.api.request.CreateUserRequest;
 
 public interface IUserService {
     User createUser(CreateUserRequest request);
+
     List<User> getAllUsers();
+
     User getUserById(Long userId);
+
     User getUsersByRoleId(Long roleId);
+
     void deleteUserById(Long userId);
 
+    User updateUser(Long userId, CreateUserRequest updateUserRequest);
 
     Optional<User> checkUserCredential(String email, String password);
+
     UserWithPetsDto getUserDetailsWithPets(Long userId);
 
     Pet addPetUnderUser(Long userId, Pet pet);
+
     List<AppointmentDto> getUserAppointments(Long userId);
 }

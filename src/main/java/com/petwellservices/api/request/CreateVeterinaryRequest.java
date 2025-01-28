@@ -5,7 +5,6 @@ import lombok.Data;
 @Data
 public class CreateVeterinaryRequest {
 
-
     private String specialization;
 
     private Float experience;
@@ -23,5 +22,5 @@ public class CreateVeterinaryRequest {
     private String clinicAddress;
 
     private Integer noOfSlots;
-   
+
 }

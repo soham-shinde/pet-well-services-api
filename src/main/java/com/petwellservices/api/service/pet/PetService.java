@@ -5,19 +5,27 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.petwellservices.api.entities.Breed;
+import com.petwellservices.api.entities.Category;
 import com.petwellservices.api.entities.Pet;
 import com.petwellservices.api.exception.ResourceNotFoundException;
+import com.petwellservices.api.repository.BreedRepository;
+import com.petwellservices.api.repository.CategoryRepository;
 import com.petwellservices.api.repository.PetRepository;
+import com.petwellservices.api.request.CreatePetRequest;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
 public class PetService implements IPetService {
     private final PetRepository petRepository;
+    private final CategoryRepository categoryRepository;
+    private final BreedRepository breedRepository;
 
     @Override
-    public Pet createPet(Pet pet) {      
+    public Pet createPet(Pet pet) {
 
         return petRepository.save(pet);
     }
@@ -45,6 +53,31 @@ public class PetService implements IPetService {
     public Pet getPetWithUserInfo(Long petId) {
 
         return petRepository.findById(petId)
-        .orElseThrow(() -> new RuntimeException("Pet not found with id: " + petId));
+                .orElseThrow(() -> new RuntimeException("Pet not found with id: " + petId));
+    }
+
+    @Override
+    public Pet updatePet(Long petId, CreatePetRequest updatePetRequest) {
+        // Fetch the pet by ID
+        Pet pet = petRepository.findById(petId)
+                .orElseThrow(() -> new EntityNotFoundException("Pet not found with id: " + petId));
+
+        // Update fields
+        pet.setPetName(updatePetRequest.getPetName());
+        pet.setPetAge(updatePetRequest.getPetAge());
+
+        // Update relationships
+        Category category = categoryRepository.findById(updatePetRequest.getCategoryId())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Category not found with id: " + updatePetRequest.getCategoryId()));
+        pet.setCategory(category);
+
+        Breed breed = breedRepository.findById(updatePetRequest.getBreedId())
+                .orElseThrow(
+                        () -> new EntityNotFoundException("Breed not found with id: " + updatePetRequest.getBreedId()));
+        pet.setBreed(breed);
+
+        // Save updated pet
+        return petRepository.save(pet);
     }
 }

@@ -1,13 +1,12 @@
 
 package com.petwellservices.api.service.category;
 
-
-
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.petwellservices.api.entities.Category;
+import com.petwellservices.api.exception.InvalidResourceException;
 import com.petwellservices.api.exception.ResourceNotFoundException;
 import com.petwellservices.api.repository.CategoryRepository;
 
@@ -21,9 +20,9 @@ public class CategoryService implements ICategoryService {
 
     @Override
     public Category createCategory(Category category) {
-        
+
         if (categoryRepository.existsByCategoryName(category.getCategoryName())) {
-            throw new RuntimeException("Category already exists with name: " + category.getCategoryName());
+            throw new InvalidResourceException("Category already exists with name: " + category.getCategoryName());
         }
         return categoryRepository.save(category);
     }
@@ -42,14 +41,15 @@ public class CategoryService implements ICategoryService {
     @Override
     public void deleteCategoryById(Long categoryId) {
         if (!categoryRepository.existsById(categoryId)) {
-            throw new RuntimeException("Category not found with id: " + categoryId);
+            throw new ResourceNotFoundException("Category not found with id: " + categoryId);
         }
         categoryRepository.deleteById(categoryId);
     }
 
     @Override
     public Category updateCategory(Long categoryId, String categoryName) {
-     Category category =  categoryRepository.findById(categoryId).orElseThrow(()->new ResourceNotFoundException("Not Found"));
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Not Found"));
         category.setCategoryName(categoryName);
         return categoryRepository.save(category);
 

@@ -54,5 +54,4 @@ public class GroomerAppointment {
     @Enumerated(EnumType.STRING)
     private AppointmentStatus status;
 
-    
 }

@@ -6,11 +6,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.petwellservices.api.dto.UserWithPetsDto;
 import com.petwellservices.api.entities.Breed;
 import com.petwellservices.api.entities.Category;
+import com.petwellservices.api.entities.Pet;
+import com.petwellservices.api.request.CreatePetRequest;
 import com.petwellservices.api.response.ApiResponse;
 import com.petwellservices.api.service.breed.IBreedService;
 import com.petwellservices.api.service.category.ICategoryService;
+import com.petwellservices.api.service.pet.IPetService;
 import com.petwellservices.api.service.user.IUserService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
@@ -21,7 +25,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RequiredArgsConstructor
 @RestController
@@ -30,6 +35,7 @@ public class PetController {
     final IUserService userService;
     final IBreedService breedService;
     final ICategoryService categoryService;
+    final IPetService petService;
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<ApiResponse> getPetDetailsByUserId(@PathVariable Long userId) {
@@ -77,6 +83,21 @@ public class PetController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse("error", e.getMessage()));
         }
+    }
+
+    @PutMapping("/{petId}")
+    public ResponseEntity<ApiResponse> updatePet(@PathVariable Long petId,
+            @RequestBody @Valid CreatePetRequest updatePetRequest) {
+        try {
+
+            Pet updatedPet = petService.updatePet(petId, updatePetRequest);
+
+            return ResponseEntity.ok(new ApiResponse("success", updatedPet));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse("error", e.getMessage()));
+        }
+
     }
 
 }

@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.petwellservices.api.entities.Area;
 import com.petwellservices.api.entities.City;
-import com.petwellservices.api.entities.Slot;
 import com.petwellservices.api.entities.User;
 import com.petwellservices.api.enums.UserStatus;
 
@@ -32,8 +31,10 @@ public class VeterinaryDto {
     private String clinicPhoneNo;
 
     private String clinicAddress;
+
     private Integer noOfSlots;
 
     private UserStatus status;
+
     private List<SlotDto> slots;
 }

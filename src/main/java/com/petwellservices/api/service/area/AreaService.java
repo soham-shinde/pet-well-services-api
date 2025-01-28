@@ -28,19 +28,16 @@ public class AreaService implements IAreaService {
 
     @Override
     public List<Area> getAreaByCityId(Long cityId) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getAreaByCityId'");
     }
 
     @Override
     public Area createArea(Area area) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'createArea'");
     }
 
     @Override
     public void deleteArea(Long areaId) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deleteArea'");
     }
 

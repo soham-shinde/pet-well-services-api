@@ -8,7 +8,7 @@ public class CreateSitterRequest {
     private String centerPhoneNo;
 
     private String centerAddress;
-    
+
     private Long cityId;
 
     private Long areaId;

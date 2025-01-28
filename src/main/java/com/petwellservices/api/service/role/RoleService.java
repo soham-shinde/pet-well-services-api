@@ -30,5 +30,4 @@ public class RoleService implements IRoleService {
         throw new UnsupportedOperationException("Unimplemented method 'deleteRole'");
     }
 
-    
 }

@@ -54,5 +54,4 @@ public class VeterinaryAppointment {
     @Enumerated(EnumType.STRING)
     private AppointmentStatus status;
 
-    
 }

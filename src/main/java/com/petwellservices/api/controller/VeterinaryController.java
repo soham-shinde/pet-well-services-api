@@ -21,6 +21,7 @@ import com.petwellservices.api.entities.Veterinary;
 import com.petwellservices.api.entities.VeterinaryAppointment;
 import com.petwellservices.api.enums.AppointmentStatus;
 import com.petwellservices.api.request.CreateSlotRequest;
+import com.petwellservices.api.request.CreateVeterinaryRequest;
 import com.petwellservices.api.response.ApiResponse;
 import com.petwellservices.api.service.appointment.IVeterinaryAppointmentService;
 import com.petwellservices.api.service.slot.ISlotService;
@@ -77,7 +78,7 @@ public class VeterinaryController {
             @RequestParam AppointmentStatus status) {
         try {
             veterinaryService.updateAppointmentStatus(appointmentId, status);
-            return ResponseEntity.ok(new ApiResponse("success","Appointment status updated successfully"));
+            return ResponseEntity.ok(new ApiResponse("success", "Appointment status updated successfully"));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -99,7 +100,7 @@ public class VeterinaryController {
             newSlot.setUserType(request.getUserType());
             newSlot.setUser(user);
             slotService.createSlot(userId, newSlot);
-            return ResponseEntity.ok(new ApiResponse("success","Slots created successfully"));
+            return ResponseEntity.ok(new ApiResponse("success", "Slots created successfully"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse("error", e.getMessage()));
@@ -138,6 +139,7 @@ public class VeterinaryController {
 
         }
     }
+
     @GetMapping("/veterinaryId/{veterinaryId}")
     public ResponseEntity<ApiResponse> getVeterinaryInfoWithSlotsByVeterinaryId(@PathVariable Long veterinaryId) {
         try {
@@ -148,6 +150,19 @@ public class VeterinaryController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse("error", e.getMessage()));
 
+        }
+    }
+
+    @PutMapping("/{veterinaryId}")
+    public ResponseEntity<ApiResponse> updateVeterinary(
+            @PathVariable Long veterinaryId,
+            @RequestBody @Valid CreateVeterinaryRequest updateVeterinaryRequest) {
+        try {
+            Veterinary updatedVeterinary = veterinaryService.updateVeterinary(veterinaryId, updateVeterinaryRequest);
+            return ResponseEntity.ok(new ApiResponse("success", updatedVeterinary));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse("error", e.getMessage()));
         }
     }
 }

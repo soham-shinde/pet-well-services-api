@@ -42,6 +42,7 @@ import com.petwellservices.api.request.CreateSitterRequest;
 import com.petwellservices.api.request.CreateUserRequest;
 import com.petwellservices.api.request.CreateVeterinaryRequest;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -74,7 +75,6 @@ public class UserService implements IUserService {
         User user = createNormalUser(request);
         switch (roleId) {
             case 1:
-
                 return createUserWithPet(user, request.getPet());
 
             case 2:
@@ -198,7 +198,7 @@ public class UserService implements IUserService {
 
     @Override
     public User getUserById(Long userId) {
-        return userRepository.findById(userId).get();    
+        return userRepository.findById(userId).get();
     }
 
     @Override
@@ -277,5 +277,37 @@ public class UserService implements IUserService {
     @Override
     public List<User> getAllUsers() {
         return userRepository.findByRoleRoleId(1L);
+    }
+
+    @Override
+    public User updateUser(Long userId, CreateUserRequest updateUserRequest) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+
+        user.setFirstName(updateUserRequest.getFirstName());
+        user.setLastName(updateUserRequest.getLastName());
+        user.setPhoneNo(updateUserRequest.getPhoneNo());
+        user.setPassword(updateUserRequest.getPassword());
+        user.setEmail(updateUserRequest.getEmail());
+        user.setAadharNo(updateUserRequest.getAadharNo());
+        user.setAddress(updateUserRequest.getAddress());
+
+        City city = cityRepository.findById(updateUserRequest.getCityId())
+                .orElseThrow(
+                        () -> new EntityNotFoundException("City not found with id: " + updateUserRequest.getCityId()));
+        user.setCity(city);
+
+        Area area = areaRepository.findById(updateUserRequest.getAreaId())
+                .orElseThrow(
+                        () -> new EntityNotFoundException("Area not found with id: " + updateUserRequest.getAreaId()));
+        user.setArea(area);
+
+        Role role = roleRepository.findById(updateUserRequest.getRoleId())
+                .orElseThrow(
+                        () -> new EntityNotFoundException("Role not found with id: " + updateUserRequest.getRoleId()));
+        user.setRole(role);
+
+        return userRepository.save(user);
     }
 }

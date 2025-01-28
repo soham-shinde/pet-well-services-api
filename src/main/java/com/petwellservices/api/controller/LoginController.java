@@ -40,10 +40,12 @@ public class LoginController {
             }
 
             // Return error response if credentials are invalid
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse("error", "Invalid email or password"));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ApiResponse("error", "Invalid email or password"));
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse("error", "Invalid email or password"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse("error", "Invalid email or password"));
         }
     }
 

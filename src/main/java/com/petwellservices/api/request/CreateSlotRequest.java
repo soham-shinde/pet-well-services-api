@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 public class CreateSlotRequest {
-     private LocalTime slotTime;
+    private LocalTime slotTime;
 
     private UserType userType;
 

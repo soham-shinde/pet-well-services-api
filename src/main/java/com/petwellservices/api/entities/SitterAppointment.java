@@ -54,5 +54,4 @@ public class SitterAppointment {
     @Enumerated(EnumType.STRING)
     private AppointmentStatus status;
 
-   
 }

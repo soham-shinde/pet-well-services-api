@@ -3,26 +3,28 @@ package com.petwellservices.api.service.groomer;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import com.petwellservices.api.dto.GroomerDto;
-import com.petwellservices.api.dto.SitterDto;
 import com.petwellservices.api.dto.SlotDto;
+import com.petwellservices.api.entities.Area;
+import com.petwellservices.api.entities.City;
 import com.petwellservices.api.entities.Groomer;
 import com.petwellservices.api.entities.GroomerAppointment;
 import com.petwellservices.api.entities.Slot;
-import com.petwellservices.api.entities.Sitter;
 import com.petwellservices.api.enums.AppointmentStatus;
 import com.petwellservices.api.enums.UserStatus;
 import com.petwellservices.api.exception.ResourceNotFoundException;
+import com.petwellservices.api.repository.AreaRepository;
+import com.petwellservices.api.repository.CityRepository;
 import com.petwellservices.api.repository.GroomerAppointmentRepository;
 import com.petwellservices.api.repository.GroomerRepository;
 import com.petwellservices.api.repository.SlotRepository;
 import com.petwellservices.api.repository.UserRepository;
+import com.petwellservices.api.request.CreateGroomerRequest;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -34,6 +36,8 @@ public class GroomerService implements IGroomerService {
 
     private final SlotRepository slotRepository;
     private final UserRepository userRepository;
+    private final CityRepository cityRepository;
+    private final AreaRepository areaRepository;
 
     private final GroomerAppointmentRepository appointmentRepository;
     private final ModelMapper modelMapper;
@@ -62,7 +66,6 @@ public class GroomerService implements IGroomerService {
 
         List<Slot> slots = slotRepository.findByUserUserId(groomer.getUser().getUserId());
 
-        // Check if each slot is booked in SitterAppointment
         List<SlotDto> slotDtos = slots.stream().map(slot -> {
             LocalDate today = LocalDate.now();
             boolean isBooked = appointmentRepository
@@ -70,14 +73,15 @@ public class GroomerService implements IGroomerService {
             SlotDto slotDto = new SlotDto();
             slotDto.setSlotId(slot.getSlotId());
             slotDto.setSlotTime(slot.getSlotTime());
-            slotDto.setAvailable(!isBooked); // Slot is available if not booked
+            slotDto.setAvailable(!isBooked);
             return slotDto;
-        }).collect(Collectors.toList());
+        }).toList();
 
         groomerDto.setSlots(slotDtos);
 
         return groomerDto;
     }
+
     @Override
     public GroomerDto getGroomerInfoWithSlotsGroomerId(Long groomerId) {
         Groomer groomer = groomerRepository.findById(groomerId)
@@ -87,7 +91,6 @@ public class GroomerService implements IGroomerService {
 
         List<Slot> slots = slotRepository.findByUserUserId(groomer.getUser().getUserId());
 
-        // Check if each slot is booked in SitterAppointment
         List<SlotDto> slotDtos = slots.stream().map(slot -> {
             LocalDate today = LocalDate.now();
             boolean isBooked = appointmentRepository
@@ -95,9 +98,9 @@ public class GroomerService implements IGroomerService {
             SlotDto slotDto = new SlotDto();
             slotDto.setSlotId(slot.getSlotId());
             slotDto.setSlotTime(slot.getSlotTime());
-            slotDto.setAvailable(!isBooked); // Slot is available if not booked
+            slotDto.setAvailable(!isBooked);
             return slotDto;
-        }).collect(Collectors.toList());
+        }).toList();
 
         groomerDto.setSlots(slotDtos);
 
@@ -169,6 +172,27 @@ public class GroomerService implements IGroomerService {
                 .toList();
     }
 
-  
+    @Override
+    public Groomer updateGroomer(Long groomerId, CreateGroomerRequest updateGroomerRequest) {
 
+        Groomer groomer = groomerRepository.findById(groomerId)
+                .orElseThrow(() -> new EntityNotFoundException("Groomer not found with id: " + groomerId));
+
+        groomer.setShopName(updateGroomerRequest.getShopName());
+        groomer.setShopPhoneNo(updateGroomerRequest.getShopPhoneNo());
+        groomer.setShopAddress(updateGroomerRequest.getShopAddress());
+        groomer.setNoOfSlots(updateGroomerRequest.getNoOfSlots());
+
+        City city = cityRepository.findById(updateGroomerRequest.getCityId())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "City not found with id: " + updateGroomerRequest.getCityId()));
+        groomer.setCity(city);
+
+        Area area = areaRepository.findById(updateGroomerRequest.getAreaId())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Area not found with id: " + updateGroomerRequest.getAreaId()));
+        groomer.setArea(area);
+
+        return groomerRepository.save(groomer);
+    }
 }

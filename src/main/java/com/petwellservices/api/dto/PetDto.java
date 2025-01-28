@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 public class PetDto {
-   private Long petId;
+    private Long petId;
 
     private String petName;
 
@@ -18,4 +18,4 @@ public class PetDto {
     private Category category;
 
     private Breed breed;
-}   
+}

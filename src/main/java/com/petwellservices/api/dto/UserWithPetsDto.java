@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.petwellservices.api.entities.Area;
 import com.petwellservices.api.entities.City;
-import com.petwellservices.api.entities.Pet;
 import com.petwellservices.api.entities.Role;
 
 import lombok.Data;
@@ -28,7 +27,10 @@ public class UserWithPetsDto {
     private String address;
 
     private City city;
+
     private Area area;
+
     private Role role;
+
     private List<PetDto> pets;
 }

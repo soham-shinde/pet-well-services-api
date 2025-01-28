@@ -96,7 +96,7 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
                 String[] areas = { "Area 1", "Phase 36", "Area 52" };
                 for (String areaName : areas) {
                     Area area = new Area();
-                    area.setAreaName(cityName +" "+areaName);
+                    area.setAreaName(cityName + " " + areaName);
                     area.setCity(city); // Associate the area with the current city
                     areaRepository.save(area);
                     System.out.println("Area created: " + areaName + " in " + cityName);

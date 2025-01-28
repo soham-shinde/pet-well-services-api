@@ -20,6 +20,7 @@ import com.petwellservices.api.entities.GroomerAppointment;
 
 import com.petwellservices.api.entities.Slot;
 import com.petwellservices.api.entities.User;
+import com.petwellservices.api.request.CreateGroomerRequest;
 import com.petwellservices.api.request.CreateSlotRequest;
 import com.petwellservices.api.response.ApiResponse;
 import com.petwellservices.api.service.appointment.IGroomerAppointmentService;
@@ -99,7 +100,7 @@ public class GroomerController {
             newSlot.setUserType(request.getUserType());
             newSlot.setUser(user);
             slotService.createSlot(userId, newSlot);
-            return ResponseEntity.ok(new ApiResponse("success","Slots created successfully"));
+            return ResponseEntity.ok(new ApiResponse("success", "Slots created successfully"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse("error", e.getMessage()));
@@ -138,11 +139,28 @@ public class GroomerController {
 
         }
     }
+
     @GetMapping("/groomerId/{groomerId}")
     public ResponseEntity<ApiResponse> getGroomerInfoWithSlotsGroomerId(@PathVariable Long groomerId) {
         try {
             GroomerDto sitter = groomerService.getGroomerInfoWithSlotsGroomerId(groomerId);
             return ResponseEntity.ok(new ApiResponse("success", sitter));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse("error", e.getMessage()));
+
+        }
+    }
+
+    @PutMapping("/{groomerId}")
+    public ResponseEntity<ApiResponse> updateGroomer(
+            @PathVariable Long groomerId,
+            @RequestBody @Valid CreateGroomerRequest updateGroomerRequest) {
+        try {
+            Groomer updatedGroomer = groomerService.updateGroomer(groomerId, updateGroomerRequest);
+
+            return ResponseEntity.ok(new ApiResponse("success", updatedGroomer));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

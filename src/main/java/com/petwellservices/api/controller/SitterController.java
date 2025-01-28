@@ -19,6 +19,7 @@ import com.petwellservices.api.entities.Sitter;
 import com.petwellservices.api.entities.SitterAppointment;
 import com.petwellservices.api.entities.Slot;
 import com.petwellservices.api.entities.User;
+import com.petwellservices.api.request.CreateSitterRequest;
 import com.petwellservices.api.request.CreateSlotRequest;
 import com.petwellservices.api.response.ApiResponse;
 import com.petwellservices.api.service.appointment.ISitterAppointmentService;
@@ -53,7 +54,6 @@ public class SitterController {
         }
     }
 
-   
     @GetMapping("/appointments/{appointmentId}/info")
     public ResponseEntity<ApiResponse> getPetInfoWithUserDetails(@PathVariable Long appointmentId) {
         try {
@@ -74,7 +74,7 @@ public class SitterController {
             @RequestParam com.petwellservices.api.enums.AppointmentStatus status) {
         try {
             sitterService.updateAppointmentStatus(appointmentId, status);
-            return ResponseEntity.ok(new ApiResponse("success","Appointment status updated successfully"));
+            return ResponseEntity.ok(new ApiResponse("success", "Appointment status updated successfully"));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -96,7 +96,7 @@ public class SitterController {
             newSlot.setUserType(request.getUserType());
             newSlot.setUser(user);
             slotService.createSlot(userId, newSlot);
-            return ResponseEntity.ok(new ApiResponse("success","Slots created successfully"));
+            return ResponseEntity.ok(new ApiResponse("success", "Slots created successfully"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse("error", e.getMessage()));
@@ -135,11 +135,28 @@ public class SitterController {
 
         }
     }
+
     @GetMapping("/sitterId/{sitterId}")
     public ResponseEntity<ApiResponse> getSitterInfoWithSlotsBySitterId(@PathVariable Long sitterId) {
         try {
             SitterDto sitter = sitterService.getSitterInfoWithSlotsBySitterId(sitterId);
             return ResponseEntity.ok(new ApiResponse("success", sitter));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse("error", e.getMessage()));
+
+        }
+    }
+
+    @PutMapping("/{sitterId}")
+    public ResponseEntity<ApiResponse> updateSitter(
+            @PathVariable Long sitterId,
+            @RequestBody @Valid CreateSitterRequest updateSitterRequest) {
+        try {
+            Sitter updatedSitter = sitterService.updateSitter(sitterId, updateSitterRequest);
+
+            return ResponseEntity.ok(new ApiResponse("success", updatedSitter));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

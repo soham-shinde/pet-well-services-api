@@ -16,12 +16,11 @@ import com.petwellservices.api.service.foodshop.IFoodShopService;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 
-
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/food-shops")
 public class FoodShopController {
-    
+
     final IFoodShopService foodShopService;
 
     @GetMapping
@@ -35,11 +34,10 @@ public class FoodShopController {
         }
     }
 
-
     @GetMapping("/{foodShopId}")
     public ResponseEntity<ApiResponse> getFoodShops(@PathVariable Long foodShopId) {
         try {
-           FoodShop foodShops = foodShopService.getFoodShopById(foodShopId);
+            FoodShop foodShops = foodShopService.getFoodShopById(foodShopId);
             return ResponseEntity.ok(new ApiResponse("success", foodShops));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

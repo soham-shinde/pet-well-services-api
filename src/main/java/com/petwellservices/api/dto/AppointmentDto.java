@@ -10,10 +10,15 @@ import lombok.Data;
 
 @Data
 public class AppointmentDto {
+
     private Long appointmentId;
+
     private String appointmentType;
+
     private LocalDate date;
+
     private String note;
+
     private String status;
 
     public static AppointmentDto fromVeterinaryAppointment(VeterinaryAppointment appointment) {
