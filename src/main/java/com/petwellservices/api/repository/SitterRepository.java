@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.petwellservices.api.entities.Groomer;
 import com.petwellservices.api.entities.Sitter;
 import com.petwellservices.api.enums.UserStatus;
 

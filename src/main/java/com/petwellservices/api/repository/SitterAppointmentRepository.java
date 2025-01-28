@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.petwellservices.api.entities.Sitter;
 import com.petwellservices.api.entities.SitterAppointment;
 import com.petwellservices.api.entities.Slot;
-import com.petwellservices.api.enums.AppointmentStatus;
 
 public interface SitterAppointmentRepository extends JpaRepository<SitterAppointment,Long> {
 

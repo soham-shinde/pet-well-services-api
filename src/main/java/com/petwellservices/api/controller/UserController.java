@@ -24,6 +24,7 @@ import com.petwellservices.api.service.appointment.IGroomerAppointmentService;
 import com.petwellservices.api.service.appointment.ISitterAppointmentService;
 import com.petwellservices.api.service.appointment.IVeterinaryAppointmentService;
 import com.petwellservices.api.service.user.IUserService;
+import com.petwellservices.api.util.Constants;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -52,10 +53,10 @@ public class UserController {
 
             VeterinaryAppointment appointment = veterinaryAppointmentService.bookAppointment(userId, veterinaryId,
                     slotId, date, note);
-            return ResponseEntity.ok(new ApiResponse("success", appointment));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, appointment));
 
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(new ApiResponse("error", e.getMessage()));
+            return ResponseEntity.internalServerError().body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -70,9 +71,9 @@ public class UserController {
         try {
             SitterAppointment appointment = sitterAppointmentService.bookAppointment(userId, sitterId, slotId, date,
                     note);
-            return ResponseEntity.ok(new ApiResponse("success", appointment));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, appointment));
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(new ApiResponse("error", e.getMessage()));
+            return ResponseEntity.internalServerError().body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -84,9 +85,9 @@ public class UserController {
         try {
             GroomerAppointment appointment = groomerAppointmentService.bookAppointment(userId, groomerId, slotId, date,
                     note);
-            return ResponseEntity.ok(new ApiResponse("success", appointment));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, appointment));
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(new ApiResponse("error", e.getMessage()));
+            return ResponseEntity.internalServerError().body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
 
     }
@@ -98,9 +99,9 @@ public class UserController {
             List<AppointmentsDto> appointments = veterinaryAppointmentService.getUserAppointments(userId);
             appointments.addAll(sitterAppointmentService.getUserAppointments(userId));
             appointments.addAll(groomerAppointmentService.getUserAppointments(userId));
-            return ResponseEntity.ok(new ApiResponse("success", appointments));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, appointments));
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(new ApiResponse("error", e.getMessage()));
+            return ResponseEntity.internalServerError().body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -109,9 +110,9 @@ public class UserController {
 
         try {
             User updatedUser = userService.updateUser(userId, updateUserRequest);
-            return ResponseEntity.ok(new ApiResponse("success", updatedUser));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, updatedUser));
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(new ApiResponse("error", e.getMessage()));
+            return ResponseEntity.internalServerError().body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 }

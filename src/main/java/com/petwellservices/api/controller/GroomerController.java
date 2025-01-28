@@ -27,6 +27,7 @@ import com.petwellservices.api.service.appointment.IGroomerAppointmentService;
 import com.petwellservices.api.service.groomer.IGroomerService;
 import com.petwellservices.api.service.slot.ISlotService;
 import com.petwellservices.api.service.user.IUserService;
+import com.petwellservices.api.util.Constants;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -48,10 +49,10 @@ public class GroomerController {
         try {
 
             List<SitterAppointmentDto> appointments = groomerAppointmentService.getGroomerAppointments(userId);
-            return ResponseEntity.ok(new ApiResponse("success", appointments));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, appointments));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -63,10 +64,10 @@ public class GroomerController {
         try {
 
             GroomerAppointment appointmentInfo = groomerAppointmentService.getAppointmentDetails(appointmentId);
-            return ResponseEntity.ok(new ApiResponse("success", appointmentInfo));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, appointmentInfo));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -78,11 +79,11 @@ public class GroomerController {
             @RequestParam String status) {
         try {
             groomerService.updateAppointmentStatus(appointmentId, status);
-            return ResponseEntity.ok(new ApiResponse("success", "Updated"));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS,  Constants.UPDATE_APPOINTMENT_SUCCESS));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -100,10 +101,10 @@ public class GroomerController {
             newSlot.setUserType(request.getUserType());
             newSlot.setUser(user);
             slotService.createSlot(userId, newSlot);
-            return ResponseEntity.ok(new ApiResponse("success", "Slots created successfully"));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS,  Constants.SLOTS_CREATED));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
 
     }
@@ -117,10 +118,10 @@ public class GroomerController {
         try {
 
             List<Groomer> sitters = groomerService.getAllGroomers();
-            return ResponseEntity.ok(new ApiResponse("success", sitters));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, sitters));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -131,11 +132,11 @@ public class GroomerController {
     public ResponseEntity<ApiResponse> getGroomerInfoWithSlots(@PathVariable Long userId) {
         try {
             GroomerDto sitter = groomerService.getGroomerInfoWithSlots(userId);
-            return ResponseEntity.ok(new ApiResponse("success", sitter));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, sitter));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
 
         }
     }
@@ -144,11 +145,11 @@ public class GroomerController {
     public ResponseEntity<ApiResponse> getGroomerInfoWithSlotsGroomerId(@PathVariable Long groomerId) {
         try {
             GroomerDto sitter = groomerService.getGroomerInfoWithSlotsGroomerId(groomerId);
-            return ResponseEntity.ok(new ApiResponse("success", sitter));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, sitter));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
 
         }
     }
@@ -160,11 +161,11 @@ public class GroomerController {
         try {
             Groomer updatedGroomer = groomerService.updateGroomer(groomerId, updateGroomerRequest);
 
-            return ResponseEntity.ok(new ApiResponse("success", updatedGroomer));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, updatedGroomer));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
 
         }
     }

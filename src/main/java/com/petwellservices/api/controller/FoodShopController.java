@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.petwellservices.api.entities.FoodShop;
 import com.petwellservices.api.response.ApiResponse;
 import com.petwellservices.api.service.foodshop.IFoodShopService;
+import com.petwellservices.api.util.Constants;
 
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -27,10 +27,10 @@ public class FoodShopController {
     public ResponseEntity<ApiResponse> getFoodShops() {
         try {
             List<FoodShop> foodShops = foodShopService.getAllFoodShops();
-            return ResponseEntity.ok(new ApiResponse("success", foodShops));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, foodShops));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -38,10 +38,10 @@ public class FoodShopController {
     public ResponseEntity<ApiResponse> getFoodShops(@PathVariable Long foodShopId) {
         try {
             FoodShop foodShops = foodShopService.getFoodShopById(foodShopId);
-            return ResponseEntity.ok(new ApiResponse("success", foodShops));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, foodShops));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 }

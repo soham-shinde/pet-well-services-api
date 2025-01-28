@@ -3,16 +3,13 @@ package com.petwellservices.api.service.appointment;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import com.petwellservices.api.dto.AppointmentsDto;
 import com.petwellservices.api.dto.PetDto;
 import com.petwellservices.api.dto.SitterAppointmentDto;
 import com.petwellservices.api.dto.SlotDto;
-import com.petwellservices.api.entities.GroomerAppointment;
 import com.petwellservices.api.entities.Pet;
-import com.petwellservices.api.entities.SitterAppointment;
 import com.petwellservices.api.entities.Slot;
 import com.petwellservices.api.entities.User;
 import com.petwellservices.api.entities.Veterinary;
@@ -73,7 +70,7 @@ public class VeterinaryAppointmentService implements IVeterinaryAppointmentServi
     @Override
     public List<AppointmentsDto> getUserAppointments(Long userId) {
         List<VeterinaryAppointment> appointments = veterinaryAppointmentRepository.findByUserUserId(userId);
-        return appointments.stream().map(this::convertToDTO).collect(Collectors.toList());
+        return appointments.stream().map(this::convertToDTO).toList();
     }
 
     private AppointmentsDto convertToDTO(VeterinaryAppointment appointment) {
@@ -102,7 +99,7 @@ public class VeterinaryAppointmentService implements IVeterinaryAppointmentServi
         slotDto.setSlotId(appointment.getSlot().getSlotId());
         slotDto.setSlotTime(appointment.getSlot().getSlotTime());
 
-        List<PetDto> petDtos = petRepository.findByUserUserId(appointment.getUser().getUserId()).stream().map(this::convertToDto).toList();
+        List<PetDto> petDtos = petRepository.findByUserUserId(appointment.getUser().getUserId()).stream().map(this::convertToDTO).toList();
         dto.setPet(petDtos);
         
         dto.setAppointmentId(appointment.getId());
@@ -121,7 +118,7 @@ public class VeterinaryAppointmentService implements IVeterinaryAppointmentServi
                 .orElseThrow(() -> new ResourceNotFoundException("appointment not found"));
     }
 
-    PetDto convertToDto(Pet pet) {
+    PetDto convertToDTO(Pet pet) {
         PetDto petDto = new PetDto();
         petDto.setPetId(pet.getPetId());
         petDto.setPetName(pet.getPetName());

@@ -13,6 +13,7 @@ import com.petwellservices.api.service.breed.IBreedService;
 import com.petwellservices.api.service.category.ICategoryService;
 import com.petwellservices.api.service.pet.IPetService;
 import com.petwellservices.api.service.user.IUserService;
+import com.petwellservices.api.util.Constants;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -41,10 +42,10 @@ public class PetController {
     public ResponseEntity<ApiResponse> getPetDetailsByUserId(@PathVariable Long userId) {
         try {
             UserWithPetsDto userWithPetsDtos = userService.getUserDetailsWithPets(userId);
-            return ResponseEntity.ok(new ApiResponse("success", userWithPetsDtos));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, userWithPetsDtos));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -52,10 +53,10 @@ public class PetController {
     public ResponseEntity<ApiResponse> getCategories() {
         try {
             List<Category> categories = categoryService.getAllCategories();
-            return ResponseEntity.ok(new ApiResponse("success", categories));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, categories));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -63,10 +64,10 @@ public class PetController {
     public ResponseEntity<ApiResponse> getBreeds() {
         try {
             List<Breed> breeds = breedService.getAllBreeds();
-            return ResponseEntity.ok(new ApiResponse("success", breeds));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, breeds));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -78,10 +79,10 @@ public class PetController {
             response.put("categories", categoryService.getAllCategories());
             response.put("breeds", breedService.getAllBreeds());
 
-            return ResponseEntity.ok(new ApiResponse("success", response));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, response));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -92,10 +93,10 @@ public class PetController {
 
             Pet updatedPet = petService.updatePet(petId, updatePetRequest);
 
-            return ResponseEntity.ok(new ApiResponse("success", updatedPet));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, updatedPet));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
 
     }

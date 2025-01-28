@@ -27,6 +27,7 @@ import com.petwellservices.api.service.appointment.IVeterinaryAppointmentService
 import com.petwellservices.api.service.slot.ISlotService;
 import com.petwellservices.api.service.user.IUserService;
 import com.petwellservices.api.service.veterinary.IVeterinaryService;
+import com.petwellservices.api.util.Constants;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -48,10 +49,10 @@ public class VeterinaryController {
         try {
 
             List<SitterAppointmentDto> appointments = veterinaryAppointmentService.getVeterinaryAppointments(userId);
-            return ResponseEntity.ok(new ApiResponse("success", appointments));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, appointments));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -63,10 +64,10 @@ public class VeterinaryController {
         try {
 
             VeterinaryAppointment appointmentInfo = veterinaryAppointmentService.getAppointmentDetails(appointmentId);
-            return ResponseEntity.ok(new ApiResponse("success", appointmentInfo));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, appointmentInfo));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -78,11 +79,11 @@ public class VeterinaryController {
             @RequestParam AppointmentStatus status) {
         try {
             veterinaryService.updateAppointmentStatus(appointmentId, status);
-            return ResponseEntity.ok(new ApiResponse("success", "Appointment status updated successfully"));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS,  Constants.UPDATE_APPOINTMENT_SUCCESS));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -100,10 +101,10 @@ public class VeterinaryController {
             newSlot.setUserType(request.getUserType());
             newSlot.setUser(user);
             slotService.createSlot(userId, newSlot);
-            return ResponseEntity.ok(new ApiResponse("success", "Slots created successfully"));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS,  Constants.SLOTS_CREATED));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
 
     }
@@ -117,10 +118,10 @@ public class VeterinaryController {
         try {
 
             List<Veterinary> veterinaries = veterinaryService.getAllVeterinaries();
-            return ResponseEntity.ok(new ApiResponse("success", veterinaries));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, veterinaries));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -131,11 +132,11 @@ public class VeterinaryController {
     public ResponseEntity<ApiResponse> getVeterinaryInfoWithSlots(@PathVariable Long userId) {
         try {
             VeterinaryDto veterinary = veterinaryService.getVeterinaryInfoWithSlots(userId);
-            return ResponseEntity.ok(new ApiResponse("success", veterinary));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, veterinary));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
 
         }
     }
@@ -144,11 +145,11 @@ public class VeterinaryController {
     public ResponseEntity<ApiResponse> getVeterinaryInfoWithSlotsByVeterinaryId(@PathVariable Long veterinaryId) {
         try {
             VeterinaryDto veterinary = veterinaryService.getVeterinaryInfoWithSlotsByVeterinaryId(veterinaryId);
-            return ResponseEntity.ok(new ApiResponse("success", veterinary));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, veterinary));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
 
         }
     }
@@ -159,10 +160,10 @@ public class VeterinaryController {
             @RequestBody @Valid CreateVeterinaryRequest updateVeterinaryRequest) {
         try {
             Veterinary updatedVeterinary = veterinaryService.updateVeterinary(veterinaryId, updateVeterinaryRequest);
-            return ResponseEntity.ok(new ApiResponse("success", updatedVeterinary));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, updatedVeterinary));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 }

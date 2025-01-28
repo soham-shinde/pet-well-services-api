@@ -8,6 +8,7 @@ import com.petwellservices.api.request.CreateUserRequest;
 import com.petwellservices.api.request.LoginRequest;
 import com.petwellservices.api.response.ApiResponse;
 import com.petwellservices.api.service.user.IUserService;
+import com.petwellservices.api.util.Constants;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,16 +37,16 @@ public class LoginController {
             if (userOptional.isPresent()) {
                 User user = userOptional.get();
 
-                return ResponseEntity.ok(new ApiResponse("success", user));
+                return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, user));
             }
 
             // Return error response if credentials are invalid
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new ApiResponse("error", "Invalid email or password"));
+                    .body(new ApiResponse(Constants.ERROR, "Invalid email or password"));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", "Invalid email or password"));
+                    .body(new ApiResponse(Constants.ERROR, "Invalid email or password"));
         }
     }
 
@@ -53,16 +54,16 @@ public class LoginController {
     public ResponseEntity<ApiResponse> registerUser(@RequestBody CreateUserRequest request) {
         try {
             User user = userService.createUser(request);
-            return ResponseEntity.ok(new ApiResponse("success", user));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, user));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
     @GetMapping("/")
     public ResponseEntity<ApiResponse> test() {
-        return ResponseEntity.ok(new ApiResponse("success", "Api Working"));
+        return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, "Api Working"));
     }
 
 }

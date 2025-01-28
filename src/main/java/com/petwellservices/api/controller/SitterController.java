@@ -26,6 +26,7 @@ import com.petwellservices.api.service.appointment.ISitterAppointmentService;
 import com.petwellservices.api.service.sitter.ISitterService;
 import com.petwellservices.api.service.slot.ISlotService;
 import com.petwellservices.api.service.user.IUserService;
+import com.petwellservices.api.util.Constants;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -47,10 +48,10 @@ public class SitterController {
         try {
 
             List<SitterAppointmentDto> appointments = sitterAppointmentService.getSitterAppointments(sitterId);
-            return ResponseEntity.ok(new ApiResponse("success", appointments));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, appointments));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -59,10 +60,10 @@ public class SitterController {
         try {
 
             SitterAppointment appointmentInfo = sitterAppointmentService.getAppointmentDetails(appointmentId);
-            return ResponseEntity.ok(new ApiResponse("success", appointmentInfo));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, appointmentInfo));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -74,11 +75,11 @@ public class SitterController {
             @RequestParam com.petwellservices.api.enums.AppointmentStatus status) {
         try {
             sitterService.updateAppointmentStatus(appointmentId, status);
-            return ResponseEntity.ok(new ApiResponse("success", "Appointment status updated successfully"));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS,  Constants.UPDATE_APPOINTMENT_SUCCESS));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -96,10 +97,10 @@ public class SitterController {
             newSlot.setUserType(request.getUserType());
             newSlot.setUser(user);
             slotService.createSlot(userId, newSlot);
-            return ResponseEntity.ok(new ApiResponse("success", "Slots created successfully"));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS,  Constants.SLOTS_CREATED));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
 
     }
@@ -113,10 +114,10 @@ public class SitterController {
         try {
 
             List<Sitter> sitters = sitterService.getAllSitters();
-            return ResponseEntity.ok(new ApiResponse("success", sitters));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, sitters));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -127,11 +128,11 @@ public class SitterController {
     public ResponseEntity<ApiResponse> getSitterInfoWithSlots(@PathVariable Long userId) {
         try {
             SitterDto sitter = sitterService.getSitterInfoWithSlots(userId);
-            return ResponseEntity.ok(new ApiResponse("success", sitter));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, sitter));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
 
         }
     }
@@ -140,11 +141,11 @@ public class SitterController {
     public ResponseEntity<ApiResponse> getSitterInfoWithSlotsBySitterId(@PathVariable Long sitterId) {
         try {
             SitterDto sitter = sitterService.getSitterInfoWithSlotsBySitterId(sitterId);
-            return ResponseEntity.ok(new ApiResponse("success", sitter));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, sitter));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
 
         }
     }
@@ -156,11 +157,11 @@ public class SitterController {
         try {
             Sitter updatedSitter = sitterService.updateSitter(sitterId, updateSitterRequest);
 
-            return ResponseEntity.ok(new ApiResponse("success", updatedSitter));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, updatedSitter));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
 
         }
     }

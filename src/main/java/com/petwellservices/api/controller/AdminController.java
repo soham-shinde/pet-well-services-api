@@ -40,6 +40,7 @@ import com.petwellservices.api.service.pet.IPetService;
 import com.petwellservices.api.service.sitter.ISitterService;
 import com.petwellservices.api.service.user.IUserService;
 import com.petwellservices.api.service.veterinary.IVeterinaryService;
+import com.petwellservices.api.util.Constants;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -71,10 +72,10 @@ public class AdminController {
     public ResponseEntity<ApiResponse> getAllUsers() {
         try {
             List<User> users = userService.getAllUsers();
-            return ResponseEntity.ok(new ApiResponse("success", users));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, users));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
 
     }
@@ -83,10 +84,10 @@ public class AdminController {
     public ResponseEntity<ApiResponse> getUserById(@PathVariable Long userId) {
         try {
             UserWithPetsDto users = userService.getUserDetailsWithPets(userId);
-            return ResponseEntity.ok(new ApiResponse("success", users));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, users));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
 
     }
@@ -96,10 +97,10 @@ public class AdminController {
 
         try {
             userService.deleteUserById(id);
-            return ResponseEntity.ok(new ApiResponse("success", "User Deleted Successfully"));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, "User Deleted Successfully"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -107,11 +108,11 @@ public class AdminController {
     public ResponseEntity<ApiResponse> getVeterinariesByStatus(@PathVariable UserStatus status) {
         try {
             List<VeterinaryDto> veterinarians = veterinaryService.getVeterinariesByStatus(status);
-            return ResponseEntity.ok(new ApiResponse("success", veterinarians));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, veterinarians));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -120,10 +121,10 @@ public class AdminController {
 
         try {
             veterinaryService.updateRequestStatus(id, status);
-            return ResponseEntity.ok(new ApiResponse("success", "Status Update Successfully"));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, Constants.SUCCESS_UPDATE));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
 
     }
@@ -133,10 +134,10 @@ public class AdminController {
 
         try {
             veterinaryService.deleteVeterinary(id);
-            return ResponseEntity.ok(new ApiResponse("success", "veterinarians Deleted"));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, "veterinarians Deleted"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
 
     }
@@ -145,11 +146,11 @@ public class AdminController {
     public ResponseEntity<ApiResponse> getSittersByStatus(@PathVariable UserStatus status) {
         try {
             List<SitterDto> sitters = sitterService.getSitterByStatus(status);
-            return ResponseEntity.ok(new ApiResponse("success", sitters));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, sitters));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -158,10 +159,10 @@ public class AdminController {
 
         try {
             sitterService.updateRequestStatus(id, status);
-            return ResponseEntity.ok(new ApiResponse("success", "Status Update Successfully"));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS,  Constants.SUCCESS_UPDATE));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -170,10 +171,10 @@ public class AdminController {
 
         try {
             sitterService.deleteSitter(id);
-            return ResponseEntity.ok(new ApiResponse("success", "sitters Deleted"));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, "sitters Deleted"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -181,11 +182,11 @@ public class AdminController {
     public ResponseEntity<ApiResponse> getGroomerByStatus(@PathVariable UserStatus status) {
         try {
             List<GroomerDto> groomers = groomerService.getGroomersByStatus(status);
-            return ResponseEntity.ok(new ApiResponse("success", groomers));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, groomers));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -194,10 +195,10 @@ public class AdminController {
 
         try {
             groomerService.updateGroomerStatus(id, status);
-            return ResponseEntity.ok(new ApiResponse("success", "Status Update Successfully"));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS,  Constants.SUCCESS_UPDATE));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
 
     }
@@ -207,10 +208,10 @@ public class AdminController {
 
         try {
             groomerService.deleteGroomer(id);
-            return ResponseEntity.ok(new ApiResponse("success", "Delete Successfully"));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, "Delete Successfully"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -223,10 +224,10 @@ public class AdminController {
             City city = cityService.getCityById(foodShop.getCityId());
             Area area = areaService.getAreaById(foodShop.getAreaId());
             FoodShop createdFoodShop = foodShopService.createFoodShop(foodShop, city, area);
-            return ResponseEntity.ok(new ApiResponse("success", createdFoodShop));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, createdFoodShop));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -236,10 +237,10 @@ public class AdminController {
             @RequestBody @Valid CreateFoodShopRequest updateFoodShopRequest) {
         try {
             FoodShop updatedFoodShop = foodShopService.updateFoodShop(shopId, updateFoodShopRequest);
-            return ResponseEntity.ok(new ApiResponse("success", updatedFoodShop));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, updatedFoodShop));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -248,11 +249,11 @@ public class AdminController {
 
         try {
             foodShopService.deleteFoodShopById(id);
-            return ResponseEntity.ok(new ApiResponse("success", "deleted Successfully"));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, "deleted Successfully"));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -262,11 +263,11 @@ public class AdminController {
     public ResponseEntity<ApiResponse> getAllPets() {
         try {
             List<Pet> pets = petService.getAllPets();
-            return ResponseEntity.ok(new ApiResponse("success", pets));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, pets));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -275,11 +276,11 @@ public class AdminController {
 
         try {
             Category createdCategory = categoryService.createCategory(category);
-            return ResponseEntity.ok(new ApiResponse("success", createdCategory));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, createdCategory));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -288,11 +289,11 @@ public class AdminController {
 
         try {
             Category updatedCategory = categoryService.updateCategory(id, newName);
-            return ResponseEntity.ok(new ApiResponse("success", updatedCategory));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, updatedCategory));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -301,11 +302,11 @@ public class AdminController {
 
         try {
             Breed createdBreed = breedService.createBreed(breed);
-            return ResponseEntity.ok(new ApiResponse("success", createdBreed));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, createdBreed));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
 
     }
@@ -314,11 +315,11 @@ public class AdminController {
     public ResponseEntity<ApiResponse> updateBreedName(@PathVariable Long id, @RequestParam String newName) {
         try {
             Breed updatedBreed = breedService.updateBreed(id, newName);
-            return ResponseEntity.ok(new ApiResponse("success", updatedBreed));
+            return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, updatedBreed));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", e.getMessage()));
+                    .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
@@ -334,17 +335,17 @@ public class AdminController {
 
                 if (user.getRole().getRoleName().equals("ROLE_ADMIN")) {
 
-                    return ResponseEntity.ok(new ApiResponse("success", user));
+                    return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, user));
                 }
 
             }
 
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new ApiResponse("error", "Invalid email or password"));
+                    .body(new ApiResponse(Constants.ERROR, "Invalid email or password"));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse("error", "Invalid email or password"));
+                    .body(new ApiResponse(Constants.ERROR, "Invalid email or password"));
         }
     }
 }
