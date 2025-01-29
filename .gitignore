@@ -34,5 +34,5 @@ build/
 raw.json
 raw.py
 asd.bat
-
+.VSCodeCounter
 *.env
