@@ -44,7 +44,7 @@ public class PetController {
             UserWithPetsDto userWithPetsDtos = userService.getUserDetailsWithPets(userId);
             return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, userWithPetsDtos));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
@@ -55,7 +55,7 @@ public class PetController {
             List<Category> categories = categoryService.getAllCategories();
             return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, categories));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
@@ -66,7 +66,7 @@ public class PetController {
             List<Breed> breeds = breedService.getAllBreeds();
             return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, breeds));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
@@ -81,7 +81,7 @@ public class PetController {
 
             return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, response));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
@@ -95,7 +95,7 @@ public class PetController {
 
             return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, updatedPet));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
 

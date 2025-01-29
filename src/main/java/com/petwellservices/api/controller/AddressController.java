@@ -55,7 +55,7 @@ public class AddressController {
             response.put("areas", dto);
             return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, response));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, e.getMessage()));
 
         }

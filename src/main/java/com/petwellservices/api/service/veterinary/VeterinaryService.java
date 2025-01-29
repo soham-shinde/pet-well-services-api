@@ -106,10 +106,10 @@ public class VeterinaryService implements IVeterinaryService {
     public void deleteVeterinary(Long veterinaryId) {
         Veterinary veterinary = veterinaryRepository.findById(veterinaryId)
                 .orElseThrow(() -> new RuntimeException("Veterinary not found"));
-
         appointmentRepository.deleteByVeterinaryVeterinaryId(veterinaryId);
-        userRepository.deleteById(veterinary.getUser().getUserId());
         veterinaryRepository.deleteById(veterinaryId);
+        userRepository.deleteByUserId(veterinary.getUser().getUserId());
+
     }
 
     @Override
@@ -169,7 +169,7 @@ public class VeterinaryService implements IVeterinaryService {
             SlotDto slotDto = new SlotDto();
             slotDto.setSlotId(slot.getSlotId());
             slotDto.setSlotTime(slot.getSlotTime());
-            slotDto.setAvailable(!isBooked); 
+            slotDto.setAvailable(!isBooked);
             return slotDto;
         }).toList();
 
@@ -179,7 +179,7 @@ public class VeterinaryService implements IVeterinaryService {
     }
 
     public Veterinary updateVeterinary(Long veterinaryId, CreateVeterinaryRequest updateVeterinaryRequest) {
-      
+
         Veterinary veterinary = veterinaryRepository.findById(veterinaryId)
                 .orElseThrow(() -> new EntityNotFoundException("Veterinary not found with id: " + veterinaryId));
 

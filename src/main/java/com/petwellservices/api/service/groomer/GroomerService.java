@@ -141,8 +141,8 @@ public class GroomerService implements IGroomerService {
         Groomer groomer = groomerRepository.findById(groomerId)
                 .orElseThrow(() -> new RuntimeException("Groomer not found"));
         appointmentRepository.deleteByGroomerGroomerId(groomerId);
-        userRepository.deleteById(groomer.getUser().getUserId());
         groomerRepository.delete(groomer);
+        userRepository.deleteById(groomer.getUser().getUserId());
         return groomer;
     }
 

@@ -40,12 +40,12 @@ public class LoginController {
                 return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, user));
             }
 
-            // Return error response if credentials are invalid
+            
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new ApiResponse(Constants.ERROR, "Invalid email or password"));
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, "Invalid email or password"));
         }
     }
@@ -56,7 +56,7 @@ public class LoginController {
             User user = userService.createUser(request);
             return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, user));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }

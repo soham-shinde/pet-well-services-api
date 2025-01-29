@@ -58,15 +58,15 @@ public class PetService implements IPetService {
 
     @Override
     public Pet updatePet(Long petId, CreatePetRequest updatePetRequest) {
-        // Fetch the pet by ID
+        
         Pet pet = petRepository.findById(petId)
                 .orElseThrow(() -> new EntityNotFoundException("Pet not found with id: " + petId));
 
-        // Update fields
+        
         pet.setPetName(updatePetRequest.getPetName());
         pet.setPetAge(updatePetRequest.getPetAge());
 
-        // Update relationships
+        
         Category category = categoryRepository.findById(updatePetRequest.getCategoryId())
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Category not found with id: " + updatePetRequest.getCategoryId()));
@@ -77,7 +77,7 @@ public class PetService implements IPetService {
                         () -> new EntityNotFoundException("Breed not found with id: " + updatePetRequest.getBreedId()));
         pet.setBreed(breed);
 
-        // Save updated pet
+        
         return petRepository.save(pet);
     }
 }

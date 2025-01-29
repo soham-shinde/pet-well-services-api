@@ -67,8 +67,7 @@ public class SlotService implements ISlotService {
     }
 
     public Slot updateSlot(Long slotId, Slot updatedSlot) {
-        Slot existingSlot = slotRepository.findById(slotId)
-                .orElseThrow(() -> new ResourceNotFoundException("Slot not found with ID: " + slotId));
+        Slot existingSlot = slotRepository.findById(slotId).orElseThrow(() -> new ResourceNotFoundException("Slot not found with ID: " + slotId));
 
         if (isSlotAlreadyExists(existingSlot.getUser().getUserId(), updatedSlot.getSlotTime(),
                 updatedSlot.getUserType(), slotId)) {

@@ -74,7 +74,7 @@ public class AdminController {
             List<User> users = userService.getAllUsers();
             return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, users));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
 
@@ -86,7 +86,7 @@ public class AdminController {
             UserWithPetsDto users = userService.getUserDetailsWithPets(userId);
             return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, users));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
 
@@ -99,7 +99,7 @@ public class AdminController {
             userService.deleteUserById(id);
             return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, "User Deleted Successfully"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
@@ -111,7 +111,7 @@ public class AdminController {
             return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, veterinarians));
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
@@ -123,7 +123,7 @@ public class AdminController {
             veterinaryService.updateRequestStatus(id, status);
             return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, Constants.SUCCESS_UPDATE));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
 
@@ -136,7 +136,7 @@ public class AdminController {
             veterinaryService.deleteVeterinary(id);
             return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, "veterinarians Deleted"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
 
@@ -149,7 +149,7 @@ public class AdminController {
             return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, sitters));
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
@@ -161,7 +161,7 @@ public class AdminController {
             sitterService.updateRequestStatus(id, status);
             return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS,  Constants.SUCCESS_UPDATE));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
@@ -173,7 +173,7 @@ public class AdminController {
             sitterService.deleteSitter(id);
             return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, "sitters Deleted"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
@@ -185,7 +185,7 @@ public class AdminController {
             return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, groomers));
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
@@ -197,7 +197,7 @@ public class AdminController {
             groomerService.updateGroomerStatus(id, status);
             return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS,  Constants.SUCCESS_UPDATE));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
 
@@ -210,12 +210,12 @@ public class AdminController {
             groomerService.deleteGroomer(id);
             return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, "Delete Successfully"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
-    // ----------------- Food Shop Endpoints -----------------
+    
 
     @PostMapping("/food-shops")
     public ResponseEntity<ApiResponse> createFoodShop(@RequestBody CreateFoodShopRequest foodShop) {
@@ -226,7 +226,7 @@ public class AdminController {
             FoodShop createdFoodShop = foodShopService.createFoodShop(foodShop, city, area);
             return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, createdFoodShop));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
@@ -239,7 +239,7 @@ public class AdminController {
             FoodShop updatedFoodShop = foodShopService.updateFoodShop(shopId, updateFoodShopRequest);
             return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, updatedFoodShop));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
@@ -252,12 +252,12 @@ public class AdminController {
             return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, "deleted Successfully"));
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
 
-    // ----------------- Pet Endpoints -----------------
+    
 
     @GetMapping("/pets")
     public ResponseEntity<ApiResponse> getAllPets() {
@@ -266,7 +266,7 @@ public class AdminController {
             return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, pets));
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
@@ -279,7 +279,7 @@ public class AdminController {
             return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, createdCategory));
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
@@ -292,7 +292,7 @@ public class AdminController {
             return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, updatedCategory));
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
@@ -305,7 +305,7 @@ public class AdminController {
             return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, createdBreed));
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
 
@@ -318,7 +318,7 @@ public class AdminController {
             return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, updatedBreed));
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
@@ -344,7 +344,7 @@ public class AdminController {
                     .body(new ApiResponse(Constants.ERROR, "Invalid email or password"));
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, "Invalid email or password"));
         }
     }

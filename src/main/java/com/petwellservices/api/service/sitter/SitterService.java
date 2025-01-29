@@ -133,8 +133,8 @@ public class SitterService implements ISitterService {
         Sitter sitter = sitterRepository.findById(sitterId).orElseThrow(() -> new RuntimeException("sitter not found"));
 
         appointmentRepository.deleteBySitterSitterId(sitterId);
-        userRepository.deleteById(sitter.getUser().getUserId());
         sitterRepository.deleteById(sitterId);
+        userRepository.deleteById(sitter.getUser().getUserId());
 
     }
 
@@ -205,13 +205,11 @@ public class SitterService implements ISitterService {
         sitter.setNoOfSlots(updateSitterRequest.getNoOfSlots());
 
         City city = cityRepository.findById(updateSitterRequest.getCityId())
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "City not found with id: " + updateSitterRequest.getCityId()));
+                .orElseThrow(() -> new EntityNotFoundException("City not found with id: " + updateSitterRequest.getCityId()));
         sitter.setCity(city);
 
         Area area = areaRepository.findById(updateSitterRequest.getAreaId())
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Area not found with id: " + updateSitterRequest.getAreaId()));
+                .orElseThrow(() -> new EntityNotFoundException("Area not found with id: " + updateSitterRequest.getAreaId()));
         sitter.setArea(area);
 
         return sitterRepository.save(sitter);

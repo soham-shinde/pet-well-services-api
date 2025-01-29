@@ -29,7 +29,7 @@ public class FoodShopController {
             List<FoodShop> foodShops = foodShopService.getAllFoodShops();
             return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, foodShops));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }
@@ -40,7 +40,7 @@ public class FoodShopController {
             FoodShop foodShops = foodShopService.getFoodShopById(foodShopId);
             return ResponseEntity.ok(new ApiResponse(Constants.SUCCESS, foodShops));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(Constants.ERROR, e.getMessage()));
         }
     }

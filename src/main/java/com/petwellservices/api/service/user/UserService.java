@@ -179,7 +179,7 @@ public class UserService implements IUserService {
         user.setEmail(request.getEmail());
         user.setPassword(request.getPassword());
         user.setAadharNo(request.getAadharNo());
-        user.setAddress(request.getAadharNo());
+        user.setAddress(request.getAddress());
 
         City city = cityRepository.findById(request.getCityId())
                 .orElseThrow(() -> new ResourceNotFoundException("Invalid City"));
