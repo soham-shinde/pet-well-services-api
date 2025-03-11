@@ -36,3 +36,4 @@ raw.py
 asd.bat
 .VSCodeCounter
 *.env
+.compressed
